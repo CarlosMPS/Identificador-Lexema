@@ -38,7 +38,7 @@ for s in string:
             ERROVOGAL = True
             print('O lexmea possui o caractere inválido: {}'.format(s))
 
-            # Verifica se possui alguma letra maiúsucula #
+            # Verifica se possui alguma letra maiúscula #
 for s in string:
     for verificaMAI in alfabeto.get('MAIUSCULO'):
             if s == verificaMAI:
@@ -47,8 +47,6 @@ for s in string:
 
 if ERROVOGAL == True:
     print('[ERRO - NADA SERÁ RETORNADO]')
-
-
 
 
 # Organizar cada tópico na sua lista #
