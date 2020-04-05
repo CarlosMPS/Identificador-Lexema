@@ -1,0 +1,161 @@
+print("""
+-----IDENTIFICADOR LEXEMA-----
+""")
+
+string = str(input('Informe uma sequência numérica '))
+print('Sequência escolhida:', string)
+
+# Listas #
+lexemaList = []
+tipoList = []
+valorList = []
+
+# Biblioteca de acordo com os 'tipos' e 'valores #
+tipos = {'NUMERO' : '0' + '1' + '2' + '3' + '4' + '5' + '6' + '7' + '8' + '9',
+        'OPERADOR' : '+' + '-' + '*' + '/',
+        'PONTUÇÃO' : '(' + ')'
+        }
+valores = {'NUMERO' : '0' + '1' + '2' + '3' + '4' + '5' + '6' + '7' + '8' + '9',
+         'SOMA': '+',
+         'SUB': '-',
+         'MULT': '*',
+         'DIV': '/',
+         'PARESQ': '(',
+         'PARDIR': ')'
+         }
+
+# Lista alfabeto erá usado em tratamento de erro #
+alfabeto = {'MINUSCULO':'a' + 'b' + 'c' + 'd' + 'e' + 'f' + 'g' + 'h' + 'i' + 'j' + 'k' + 'l' + 'm' + 'n' + 'o' + 'p' + 'q' + 'r' + 's' + 't' + 'u' + 'v' + 'x' + 'z' + 'w' + 'y',
+            'MAIUSCULO': 'A' + 'B' + 'C' + 'D' + 'E' + 'F' + 'G' + 'H' + 'I' + 'J' + 'K' + 'L' + 'M' + 'N' + 'O' + 'P' +'Q' + 'R' + 'S' + 'T' + 'U' + 'V' + 'X' + 'Z' + 'W' + 'Y'
+            }
+
+# Organizar cada tópico na sua lista #
+i = 0
+for chars in string:
+    for tipo in tipos:
+        for tipoEncontrado in tipos.get(tipo):
+            if chars == tipoEncontrado:
+                lexemaList.append(chars)
+                tipoList.append(tipo)
+    for valor in valores:
+        for valorEncontrado in valores.get(valor):
+            if chars == valorEncontrado:
+                valorList.append(valor)
+
+i = 0 # Usado para condição principal 'while' #
+y = 0 # Armazenar os valores na lista #
+z = 1 # Usado para rodar toda a lista #
+tamLexema = len(lexemaList) # Esse parametro precisou ser definido em vez de usar diretamento o 'len(lexemaList)', pois a lista ia diminuindo, de acordo com que os números iam se juntando #
+
+# Compara todos os valores e junta os que estão na biblioteca tipoList como 'NUMERO' #
+while i+1 < tamLexema:
+    if tipoList[y] == 'NUMERO' and tipoList[z] == 'NUMERO' or lexemaList[y] == '*' and lexemaList[z] == '*':
+        # Somar lexemaList e repetir as outras listas
+        lexemaList[y] = lexemaList[y] + lexemaList[z]
+        i += 1
+        del(lexemaList[z])
+        del(tipoList[z])
+        del(valorList[z])
+    else:
+        i += 1
+        y += 1
+        z += 1
+
+# TRATAMENTO #
+
+# Corrigir ** -> será reconhecido como POTENC em vez de MULT #
+i = 0
+while i < len(lexemaList):
+    if lexemaList[i] == '**' and valorList[i] == 'MULT':
+        valorList[i] = 'POTENC'
+        i += 1
+    else:
+        i += 1
+
+# RECONHECIMENTO DE ERROS #
+
+ERRO = False
+erroLetra = False
+erroPontuacao = False
+erroUltimoCaractere = False
+erroParenteses = False
+doisOperadores = False
+
+# Erro caso possua alguma letra do alfabeto na sequência numérica #
+for lexema in string:
+    for letras in alfabeto:
+        for letra in alfabeto.get(letras):
+            if lexema == letra:
+                erroLetra = True
+                ERRO = True
+
+# Erro em casos em que apareça as operações inválidas: '(+' e/ou '+)'
+i = 0
+while i+1 < len(lexemaList):
+    if lexemaList[i] == '(' and lexemaList[i+1] == '+' or lexemaList[i] == '+' and lexemaList[i+1] == ')':
+        i += 1
+        erroPontuacao = True
+        ERRO = True
+    else:
+        i += 1
+
+# Erro caso possua '+', '-', '*', '/' ou '(' no final da lista #
+tamanhoLista = len(lexemaList) - 1
+if lexemaList[tamanhoLista] == '+' \
+        or lexemaList[tamanhoLista] == '-' \
+        or lexemaList[tamanhoLista] == '*' \
+        or lexemaList[tamanhoLista] == '/' \
+        or lexemaList[tamanhoLista] == '('\
+        or lexemaList[tamanhoLista] == '+':
+    erroUltimoCaractere = True
+    ERRO = True
+
+# Erro caso os parênteses não fechem #
+i = 0
+tam = len(lexemaList)
+possui = False
+for x in lexemaList:
+    if x == '(':
+        while i < tam:
+            if lexemaList[i] != ')':
+                possui = True
+                i += 1
+            else:
+                possui = False
+                i = tam
+    if possui == True:
+        erroParenteses = True
+        ERRO = True
+
+# Erro: Um operador ao lado do outro #
+i = 0
+tam = len(lexemaList)
+while i < tam:
+    if tipoList[i] == 'OPERADOR' and tipoList[i+1] == 'OPERADOR':
+        doisOperadores = True
+        ERRO = True
+        i = tam
+    else:
+        i += 1
+#-----------------------------------------------------------------------------------#
+#print('Lista: {}'.format(lexemaList))
+print('===== APÓS MODIFICAÇÃO =====')
+# RETORNAR LISTA ORGANIZADA #
+i=0
+if ERRO == False:
+    print('[ORGANIZAÇÃO: LEXEMA | TIPO | VALOR]')
+    while i != len(lexemaList):
+        print('{}* Valor => {} - {} - {}'.format(i+1, lexemaList[i], tipoList[i], valorList[i]))
+        i += 1
+else:
+    print('[ERRO - NADA SERÁ RETORNADO]')
+    if erroLetra == True:
+        print('ERRO: caractere inválido')
+    if erroPontuacao == True:
+        print('ERRO: Caractere "(+" e/ou "+)"')
+    if erroUltimoCaractere == True:
+        print('ERRO: Último caractere está sendo composto por: +, -, *, / ou (')
+    if ERRO == True and erroParenteses == True:
+        print('ERRO: Os Parênteses não fecham')
+    if ERRO == True and doisOperadores == True:
+        print('ERRO: Dois operadores um ao lado do outro')
