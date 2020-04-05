@@ -29,6 +29,28 @@ alfabeto = {'MINUSCULO':'a' + 'b' + 'c' + 'd' + 'e' + 'f' + 'g' + 'h' + 'i' + 'j
             'MAIUSCULO': 'A' + 'B' + 'C' + 'D' + 'E' + 'F' + 'G' + 'H' + 'I' + 'J' + 'K' + 'L' + 'M' + 'N' + 'O' + 'P' +'Q' + 'R' + 'S' + 'T' + 'U' + 'V' + 'X' + 'Z' + 'W' + 'Y'
             }
 
+ERROVOGAL = False
+
+            # Verifica se possui alguma letra minúscula #
+for s in string:
+    for verificaMIN in alfabeto.get('MINUSCULO'):
+        if s == verificaMIN:
+            ERROVOGAL = True
+            print('O lexmea possui o caractere inválido: {}'.format(s))
+
+            # Verifica se possui alguma letra maiúsucula #
+for s in string:
+    for verificaMAI in alfabeto.get('MAIUSCULO'):
+            if s == verificaMAI:
+                ERROVOGAL = True
+                print('O lexmea possui o caractere inválido: {}'.format(s))
+
+if ERROVOGAL == True:
+    print('[ERRO - NADA SERÁ RETORNADO]')
+
+
+
+
 # Organizar cada tópico na sua lista #
 i = 0
 for chars in string:
