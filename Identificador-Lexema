@@ -150,8 +150,8 @@ for x in lexemaList:
 # Erro: Um operador ao lado do outro #
 i = 0
 tam = len(lexemaList)
-while i < tam:
-    if tipoList[i] == 'OPERADOR' and tipoList[i+1] == 'OPERADOR':
+while i+1 < tam:
+    if tipoList[i] == 'OPERADOR' and tipoList[i+1] == 'OPERADOR' and lexemaList[i] != '/':
         doisOperadores = True
         ERRO = True
         i = tam
